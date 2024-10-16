@@ -1,0 +1,20 @@
+.tables-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .table-box {
+    border: 2px solid #000;
+    padding: 20px;
+    margin: 10px;
+    width: 100px;
+    text-align: center;
+    background-color: #f0f0f0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .occupied {
+    background-color: orange;
+  }
+  
