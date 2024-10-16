@@ -1,0 +1,20 @@
+.category-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .category-box {
+    padding: 10px;
+    background-color: orange;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .category-box:hover {
+    background-color: darkorange;
+    color: white;
+  }
+  

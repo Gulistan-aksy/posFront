@@ -1,0 +1,15 @@
+.order-detail-page {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .left-panel {
+    flex: 1;
+    border-right: 1px solid #ddd;
+    padding-right: 20px;
+  }
+  
+  .right-panel {
+    flex: 1;
+  }
+  

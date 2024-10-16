@@ -1,0 +1,14 @@
+.product-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .product-box {
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
