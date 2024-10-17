@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1 className="text-3xl font-bold text-center my-6">Masa Listesi</h1>
+        <h1 className="text-4xl font-bold text-center my-6 text-indigo-600">Masa Listesi</h1>
         <Routes>
           <Route path="/" element={<TableList />} />
           <Route path="/orders/:tableId" element={<OrderList />} />

@@ -25,11 +25,11 @@ const OrderList = () => {
   }, [tableId]);
 
   if (loading) {
-    return <p>Loading orders...</p>;
+    return <p className="text-center">Loading orders...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="text-center text-red-500">{error}</p>;
   }
 
   const handleOrderClick = (orderId) => {
@@ -43,11 +43,11 @@ const OrderList = () => {
         orders.map((order) => (
           <div
             key={order.order_id}
-            className="border p-4 rounded-lg mb-4 cursor-pointer hover:bg-gray-100"
+            className="border p-4 rounded-lg mb-4 cursor-pointer hover:bg-gray-100 transition duration-300"
             onClick={() => handleOrderClick(order.order_id)}
           >
-            <p className="text-lg">Order ID: {order.order_id}</p>
-            <p>Total Amount: {order.total_amount} TL</p>
+            <p className="text-lg font-medium">Sipariş ID: {order.order_id}</p>
+            <p className="text-md">Toplam Tutar: <span className="font-bold">{order.total_amount} TL</span></p>
           </div>
         ))
       ) : (

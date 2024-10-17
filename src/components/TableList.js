@@ -24,11 +24,11 @@ const TableList = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading tables...</p>;
+    return <p className="text-center">Loading tables...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="text-center text-red-500">{error}</p>;
   }
 
   const handleTableClick = (tableId) => {
@@ -40,12 +40,12 @@ const TableList = () => {
       {tables.map((table) => (
         <div
           key={table.id}
-          className={`w-24 h-24 flex justify-center items-center border rounded-lg cursor-pointer transition ${
-            table.is_occupied ? 'bg-orange-500' : 'bg-gray-300'
+          className={`w-24 h-24 flex justify-center items-center border-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 ${
+            table.is_occupied ? 'bg-orange-500 border-orange-700' : 'bg-gray-300 border-gray-500'
           }`}
           onClick={() => table.is_occupied && handleTableClick(table.id)}
         >
-          <p className="text-xl">{table.entity_number}</p>
+          <p className="text-xl font-semibold text-white">{table.entity_number}</p>
         </div>
       ))}
     </div>
