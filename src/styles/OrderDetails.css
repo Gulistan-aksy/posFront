@@ -1,53 +1,123 @@
 .order-details-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-  }
-  
-  .left-panel, .middle-panel, .right-panel {
-    width: 30%;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .left-panel {
-    background-color: #f0f0f0;
-  }
-  
-  .middle-panel {
-    background-color: orange;
-  }
-  
-  .right-panel {
-    background-color: lightgreen;
-  }
-  
-  .order-detail-box, .category-box, .product-box {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: white;
-  }
-  
-  .category-box:hover, .product-box:hover {
-    cursor: pointer;
-    background-color: #eaeaea;
-  }
-  
-  button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+}
+
+.left-panel, .middle-panel, .right-panel {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.left-panel {
+  background-color: #f7f9fc;
+}
+
+.middle-panel {
+  background-color: #f0f0f0;
+}
+
+.right-panel {
+  background-color: #f0f8ff;
+}
+
+.order-detail-box, .category-box, .product-box {
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s, transform 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.order-detail-box.canceled {
+  background-color: #ffe0e0; /* Canceled detaylar için kırmızı arka plan */
+}
+
+.product-box:hover, .category-box:hover {
+  background-color: #e3f2fd;
+}
+
+/* Order detail butonları */
+.detail-actions {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: -60px;  /* Butonları sol tarafa taşıyoruz */
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 10px;
+}
+
+.delete-btn, .gift-btn, .move-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.gift-btn {
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.move-btn {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.order-detail-box {
+  position: relative;  /* Butonların kutucuğa göre konumlandırılması için gerekli */
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 24px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.product-list, .category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
