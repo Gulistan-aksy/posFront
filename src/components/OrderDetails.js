@@ -8,10 +8,10 @@ const OrderDetails = () => {
   const [orderDetails, setOrderDetails] = useState([]);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]); // Seçilen ürünler (new olacak)
-  const [selectedDetail, setSelectedDetail] = useState(null); // Seçilen detay için state
+  const [selectedProducts, setSelectedProducts] = useState([]); // new olarak seçilen ürünler
+  const [selectedDetail, setSelectedDetail] = useState(null); // mevcut detay için seçili state
+  const [selectedNewDetail, setSelectedNewDetail] = useState(null); // new ürünler için seçili state
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [noProducts, setNoProducts] = useState(false);
   const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ const OrderDetails = () => {
     }
   };
 
-  // Ürün seçimi yapıldığında order detail ekleme
+  // Ürün seçimi yapıldığında new olarak ekleme
   const handleProductSelect = (product) => {
     const newDetail = {
       product_id: product.id,
@@ -71,51 +71,67 @@ const OrderDetails = () => {
       unit_price: product.price,
       total_price: product.price,
       status: 'new',
-      is_gift: false
+      is_gift: false,
     };
-    setSelectedProducts([...selectedProducts, newDetail]); // Yeni ürünleri seçilenlere ekle
+    setSelectedProducts([...selectedProducts, newDetail]); // new olarak ürünleri ekle
   };
 
-  // Seçilen detay için delete, gift ve move butonlarını göster
+  // Mevcut order detail seçimi
   const handleDetailClick = (detail) => {
     setSelectedDetail(detail);
   };
 
-  // Seçilen ürünleri kaydetme işlemi (API çağrısı ile kaydet)
+  // New ürünler için seçim ve butonların gösterilmesi
+  const handleNewDetailClick = (index) => {
+    setSelectedNewDetail(index);
+  };
+
+  // Gift butonuna tıklayınca is_gift özelliğini değiştirme
+  const handleGiftToggle = (index) => {
+    const updatedProducts = [...selectedProducts];
+    updatedProducts[index].is_gift = !updatedProducts[index].is_gift;
+    setSelectedProducts(updatedProducts);
+  };
+
+  // Seçilen new ürünleri kaydetme işlemi (API ile)
   const handleSaveOrderDetails = async () => {
-    const details = selectedProducts.map(product => ({
+    const details = selectedProducts.map((product) => ({
       product_id: product.product_id,
       quantity: product.quantity,
       is_gift: product.is_gift,
-      description: '' // Ekstra bilgi ekleyebilirsiniz
+      description: '',
     }));
 
     const payload = {
       order_id: parseInt(orderId),
-      entity_id: 6, // Bu örnek için sabit değer
-      waiter_id: 2, // Sabit değer (gerçekte kullanıcıdan alınabilir)
-      details: details
+      entity_id: 6, // Sabit değer (düzenlenebilir)
+      waiter_id: 2, // Sabit değer (düzenlenebilir)
+      details: details,
     };
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/v1/orders/dine-in', payload);
-      setOrderDetails([...orderDetails, ...response.data]); // Yeni detayları ekle
-      setSelectedProducts([]); // Seçilen ürünleri temizle
+      setOrderDetails([...orderDetails, ...response.data]); // Yeni detayları orderDetails'e ekle
+      setSelectedProducts([]); // new ürün listesini temizle
     } catch (err) {
       console.error('Failed to save order details');
     }
   };
 
-  // Order detail silme işlemi
+  // New ürünlerden silme işlemi
+  const handleDeleteNewDetail = (index) => {
+    const updatedProducts = selectedProducts.filter((_, idx) => idx !== index);
+    setSelectedProducts(updatedProducts);
+    setSelectedNewDetail(null); // Seçimi temizle
+  };
+
+  // Mevcut order detail silme işlemi
   const handleDeleteOrderDetail = async (orderDetailId) => {
     try {
-      // Veritabanından sil
       await axios.delete(`http://127.0.0.1:8000/api/v1/order-details/${orderDetailId}`);
-
-      // Statüsü 'canceled' olarak ekranda güncelle
-      setOrderDetails(orderDetails.map(detail => {
+      setOrderDetails(orderDetails.map((detail) => {
         if (detail.id === orderDetailId) {
-          return { ...detail, status: 'canceled' }; // Statüyü canceled olarak güncelle
+          return { ...detail, status: 'canceled' };
         }
         return detail;
       }));
@@ -133,7 +149,11 @@ const OrderDetails = () => {
       <div className="left-panel">
         <h2>Order Details</h2>
         {orderDetails.map((detail) => (
-          <div key={detail.id} className={`order-detail-box ${detail.status === 'canceled' ? 'canceled' : ''}`} onClick={() => handleDetailClick(detail)}>
+          <div
+            key={detail.id}
+            className={`order-detail-box ${detail.status === 'canceled' ? 'canceled' : ''}`}
+            onClick={() => handleDetailClick(detail)}
+          >
             {selectedDetail && selectedDetail.id === detail.id && (
               <div className="detail-actions">
                 <button className="delete-btn" onClick={() => handleDeleteOrderDetail(detail.id)}>Delete</button>
@@ -150,12 +170,20 @@ const OrderDetails = () => {
           </div>
         ))}
 
-        {/* Seçilen yeni ürünleri göster */}
+        {/* Seçilen new ürünleri göster */}
         {selectedProducts.length > 0 && (
           <div>
             <h3>Selected Products (New)</h3>
             {selectedProducts.map((product, index) => (
-              <div key={index} className="order-detail-box">
+              <div key={index} className="order-detail-box" onClick={() => handleNewDetailClick(index)}>
+                {selectedNewDetail === index && (
+                  <div className="detail-actions">
+                    <button className="delete-btn" onClick={() => handleDeleteNewDetail(index)}>Delete</button>
+                    <button className="gift-btn" onClick={() => handleGiftToggle(index)}>
+                      {product.is_gift ? 'Unmark Gift' : 'Gift'}
+                    </button>
+                  </div>
+                )}
                 <p><strong>Product Name:</strong> {product.product_name}</p>
                 <p><strong>Quantity:</strong> {product.quantity}</p>
                 <p><strong>Total Price:</strong> {product.total_price} TL</p>
