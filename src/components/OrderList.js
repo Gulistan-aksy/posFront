@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import OrderCard from './OrderCard';
 
 const OrderList = () => {
   const { tableId } = useParams();
@@ -32,23 +33,16 @@ const OrderList = () => {
     return <p className="text-center text-red-500">{error}</p>;
   }
 
-  const handleOrderClick = (orderId) => {
-    navigate(`/order-details/${orderId}`);
-  };
-
   return (
     <div className="p-4">
       <h2 className="text-2xl font-semibold mb-4">Siparişler</h2>
       {orders.length > 0 ? (
         orders.map((order) => (
-          <div
-            key={order.order_id}
-            className="border p-4 rounded-lg mb-4 cursor-pointer hover:bg-gray-100 transition duration-300"
-            onClick={() => handleOrderClick(order.order_id)}
-          >
-            <p className="text-lg font-medium">Sipariş ID: {order.order_id}</p>
-            <p className="text-md">Toplam Tutar: <span className="font-bold">{order.total_amount} TL</span></p>
-          </div>
+          <OrderCard 
+            key={order.order_id} 
+            order={order} 
+            onClick={() => navigate(`/order-details/${order.order_id}`)} 
+          />
         ))
       ) : (
         <p>No orders found for this table.</p>

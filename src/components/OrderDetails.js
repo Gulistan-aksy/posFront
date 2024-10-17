@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import OrderDetailCard from './OrderDetailCard';
+import ProductCard from './ProductCard';
+import CategoryCard from './CategoryCard';
+import Button from './Button';
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -133,25 +137,13 @@ const OrderDetails = () => {
       <div className="left-panel flex-1 bg-white rounded-lg shadow-md p-4">
         <h2 className="text-2xl font-semibold mb-4">Sipariş Detayları</h2>
         {orderDetails.map((detail) => (
-          <div
+          <OrderDetailCard
             key={detail.id}
-            className={`border p-4 rounded-lg mb-4 ${detail.status === 'canceled' ? 'bg-red-200' : 'bg-white shadow-sm'}`}
+            detail={detail}
+            isSelected={selectedDetail && selectedDetail.id === detail.id}
             onClick={() => handleDetailClick(detail)}
-          >
-            {selectedDetail && selectedDetail.id === detail.id && (
-              <div className="flex gap-2 mb-2">
-                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteOrderDetail(detail.id)}>Sil</button>
-                <button className="bg-yellow-500 text-white px-4 py-2 rounded">Hediye</button>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded">Taşı</button>
-              </div>
-            )}
-            <p><strong>Ürün Adı:</strong> {detail.product_name}</p>
-            <p><strong>Miktar:</strong> {detail.quantity}</p>
-            <p><strong>Toplam Tutar:</strong> {detail.total_price} TL</p>
-            <p><strong>Durum:</strong> {detail.status}</p>
-            <p><strong>Hediye mi:</strong> {detail.is_gift ? 'Evet' : 'Hayır'}</p>
-            <p><strong>Sipariş Numarası:</strong> {detail.order_number}</p>
-          </div>
+            onDelete={() => handleDeleteOrderDetail(detail.id)}
+          />
         ))}
 
         {selectedProducts.length > 0 && (
@@ -161,10 +153,10 @@ const OrderDetails = () => {
               <div key={index} className="border p-4 rounded-lg mb-4 bg-gray-50" onClick={() => handleNewDetailClick(index)}>
                 {selectedNewDetail === index && (
                   <div className="flex gap-2 mb-2">
-                    <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteNewDetail(index)}>Sil</button>
-                    <button className="bg-yellow-500 text-white px-4 py-2 rounded" onClick={() => handleGiftToggle(index)}>
+                    <Button className="bg-red-500 text-white" onClick={() => handleDeleteNewDetail(index)}>Sil</Button>
+                    <Button className="bg-yellow-500 text-white" onClick={() => handleGiftToggle(index)}>
                       {product.is_gift ? 'Hediye İşaretini Kaldır' : 'Hediye'}
-                    </button>
+                    </Button>
                   </div>
                 )}
                 <p><strong>Ürün Adı:</strong> {product.product_name}</p>
@@ -177,23 +169,21 @@ const OrderDetails = () => {
         )}
 
         {selectedProducts.length > 0 && (
-          <button className="bg-green-500 text-white px-4 py-2 rounded mt-4" onClick={handleSaveOrderDetails}>Sipariş Detaylarını Kaydet</button>
+          <Button className="bg-green-500 text-white mt-4" onClick={handleSaveOrderDetails}>Sipariş Detaylarını Kaydet</Button>
         )}
 
-        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" onClick={() => navigate(-1)}>Geri Dön</button>
+        <Button className="bg-blue-500 text-white mt-4" onClick={() => navigate(-1)}>Geri Dön</Button>
       </div>
 
       <div className="middle-panel flex-1 bg-white rounded-lg shadow-md p-4">
         <h2 className="text-2xl font-semibold mb-4">Kategoriler</h2>
         <div className="flex flex-col gap-4">
           {categories.map((category) => (
-            <div
-              key={category.id}
-              className="border p-4 rounded-lg cursor-pointer bg-white hover:bg-blue-50 transition duration-200"
-              onClick={() => fetchProductsByCategory(category.id)}
-            >
-              <p>{category.name}</p>
-            </div>
+            <CategoryCard 
+              key={category.id} 
+              category={category} 
+              onClick={() => fetchProductsByCategory(category.id)} 
+            />
           ))}
         </div>
       </div>
@@ -205,14 +195,11 @@ const OrderDetails = () => {
             <p>Bu kategori için ürün yok.</p>
           ) : (
             products.map((product) => (
-              <div
-                key={product.id}
-                className="border p-4 rounded-lg cursor-pointer bg-white hover:bg-green-50 transition duration-200"
-                onClick={() => handleProductSelect(product)}
-              >
-                <p>{product.name}</p>
-                <p><strong>Fiyat:</strong> {product.price} TL</p>
-              </div>
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                onClick={() => handleProductSelect(product)} 
+              />
             ))
           )}
         </div>
@@ -222,4 +209,3 @@ const OrderDetails = () => {
 };
 
 export default OrderDetails;
-
