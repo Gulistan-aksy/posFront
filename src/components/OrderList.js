@@ -3,11 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const OrderList = () => {
-  const { tableId } = useParams(); // Parametreyi alıyoruz.
+  const { tableId } = useParams();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Yönlendirme işlemi için kullanıyoruz.
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -33,16 +33,20 @@ const OrderList = () => {
   }
 
   const handleOrderClick = (orderId) => {
-    navigate(`/order-details/${orderId}`); // Sipariş detaylarına yönlendirme.
+    navigate(`/order-details/${orderId}`);
   };
 
   return (
-    <div>
-      <h2>Siparişler</h2>
+    <div className="p-4">
+      <h2 className="text-2xl font-semibold mb-4">Siparişler</h2>
       {orders.length > 0 ? (
         orders.map((order) => (
-          <div key={order.order_id} className="order-box" onClick={() => handleOrderClick(order.order_id)}>
-            <p>Order ID: {order.order_id}</p>
+          <div
+            key={order.order_id}
+            className="border p-4 rounded-lg mb-4 cursor-pointer hover:bg-gray-100"
+            onClick={() => handleOrderClick(order.order_id)}
+          >
+            <p className="text-lg">Order ID: {order.order_id}</p>
             <p>Total Amount: {order.total_amount} TL</p>
           </div>
         ))

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/TableList.css'; 
 import axios from 'axios';
 
 const TableList = () => {
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Yönlendirme için kullanıyoruz.
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTables = async () => {
@@ -33,18 +32,20 @@ const TableList = () => {
   }
 
   const handleTableClick = (tableId) => {
-    navigate(`/orders/${tableId}`); // Masa ID'ye göre yönlendirme yapıyoruz.
+    navigate(`/orders/${tableId}`);
   };
 
   return (
-    <div className="table-container">
+    <div className="flex flex-wrap justify-center gap-4 p-4">
       {tables.map((table) => (
         <div
           key={table.id}
-          className={`table-box ${table.is_occupied ? 'occupied' : ''}`}
-          onClick={() => table.is_occupied && handleTableClick(table.id)} // Doluysa tıklanabilir.
+          className={`w-24 h-24 flex justify-center items-center border rounded-lg cursor-pointer transition ${
+            table.is_occupied ? 'bg-orange-500' : 'bg-gray-300'
+          }`}
+          onClick={() => table.is_occupied && handleTableClick(table.id)}
         >
-          <p>{table.entity_number}</p>
+          <p className="text-xl">{table.entity_number}</p>
         </div>
       ))}
     </div>
