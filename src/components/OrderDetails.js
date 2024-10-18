@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; 
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import OrderDetailCard from './OrderDetailCard';
 import ProductCard from './ProductCard';
@@ -131,7 +131,17 @@ const OrderDetails = () => {
     setSelectedDetail(detail);
   };
 
-  const handleGiftToggle = (index) => {
+  // Hediye durumu güncelleme ve total_amount'u güncelleme işlevi
+  const handleGiftToggle = (isGift, newTotalAmount) => {
+    setOrderDetails((prevDetails) =>
+      prevDetails.map((detail) =>
+        detail.id === selectedDetail.id ? { ...detail, is_gift: isGift } : detail
+      )
+    );
+    setTotalAmount(newTotalAmount); // Yeni total_amount'u güncelle
+  };
+
+  const handleGiftToggleForNew = (index) => {
     const updatedProducts = [...selectedProducts];
     updatedProducts[index].is_gift = !updatedProducts[index].is_gift;
     setSelectedProducts(updatedProducts);
@@ -162,6 +172,7 @@ const OrderDetails = () => {
             isSelected={selectedDetail && selectedDetail.id === detail.id}
             onClick={() => handleDetailClick(detail)}
             onDelete={() => handleDeleteOrderDetail(detail.id)} // Delete işlevi çalışıyor
+            onGiftToggle={handleGiftToggle} // Gift işlevi eklendi
           />
         ))}
 
@@ -173,7 +184,7 @@ const OrderDetails = () => {
                 {selectedNewDetail === index && (
                   <div className="flex gap-2 mb-2">
                     <Button className="bg-red-500 text-white" onClick={() => handleDeleteNewDetail(index)}>Sil</Button> {/* Delete işlevi */}
-                    <Button className="bg-yellow-500 text-white" onClick={() => handleGiftToggle(index)}>
+                    <Button className="bg-yellow-500 text-white" onClick={() => handleGiftToggleForNew(index)}>
                       {product.is_gift ? 'Hediye İşaretini Kaldır' : 'Hediye'} {/* Gift işlevi */}
                     </Button>
                   </div>
