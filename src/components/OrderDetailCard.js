@@ -1,9 +1,8 @@
-// components/OrderDetailCard.js
 import React from 'react';
 import axios from 'axios';
 
 const OrderDetailCard = ({ detail, isSelected, onClick, onDelete, onGiftToggle, onQuantityChange }) => {
-  
+
   // Hediye durumunu API ile güncelleme işlevi
   const handleGiftClick = async () => {
     try {
@@ -26,7 +25,7 @@ const OrderDetailCard = ({ detail, isSelected, onClick, onDelete, onGiftToggle, 
         { quantity: change } // Arttırma ya da azaltma yapılacak miktar
       );
       // Parent component'e yeni quantity ve yeni total price bilgisi aktarılır
-      onQuantityChange(detail.id, response.data.quantity, response.data.total_price);
+      onQuantityChange(detail.id, response.data.order_detail.quantity, response.data.order_detail.total_price, response.data.new_total_amount);
     } catch (error) {
       console.error('Miktar güncellenirken hata oluştu:', error);
     }
