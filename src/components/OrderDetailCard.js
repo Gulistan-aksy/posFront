@@ -2,19 +2,33 @@
 import React from 'react';
 import axios from 'axios';
 
-const OrderDetailCard = ({ detail, isSelected, onClick, onDelete, onGiftToggle }) => {
+const OrderDetailCard = ({ detail, isSelected, onClick, onDelete, onGiftToggle, onQuantityChange }) => {
+  
+  // Hediye durumunu API ile güncelleme işlevi
   const handleGiftClick = async () => {
     try {
       const response = await axios.put(
         `http://127.0.0.1:8000/api/v1/order-detail/update-is-gift/${detail.id}`,
-        {
-          is_gift: !detail.is_gift, // Hediye durumunu tersine çevir
-        }
+        { is_gift: !detail.is_gift }
       );
-      // Hediye durumu ve yeni total_amount API'den başarıyla geldiğinde parent component'e bildiriyoruz
+      // Parent component'e yeni hediye durumu ve yeni toplam tutar bilgisi aktarılır
       onGiftToggle(response.data.order_detail.is_gift, response.data.new_total_amount);
     } catch (error) {
       console.error('Hediye durumu güncellenirken hata oluştu:', error);
+    }
+  };
+
+  // Quantity güncelleme işlevi, arttırmak veya azaltmak için kullanılır
+  const updateQuantity = async (change) => {
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/v1/order-details/quantity/${detail.id}`,
+        { quantity: change } // Arttırma ya da azaltma yapılacak miktar
+      );
+      // Parent component'e yeni quantity ve yeni total price bilgisi aktarılır
+      onQuantityChange(detail.id, response.data.quantity, response.data.total_price);
+    } catch (error) {
+      console.error('Miktar güncellenirken hata oluştu:', error);
     }
   };
 
@@ -34,6 +48,13 @@ const OrderDetailCard = ({ detail, isSelected, onClick, onDelete, onGiftToggle }
             {detail.is_gift ? 'Hediye İşaretini Kaldır' : 'Hediye'}
           </button>
           <button className="bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-200">Taşı</button>
+          
+          {/* Quantity güncelleme butonları */}
+          <div className="flex items-center gap-2">
+            <button className="bg-gray-500 text-white px-2 py-1 rounded" onClick={() => updateQuantity(-1)}>-</button>
+            <span className="text-lg font-semibold">{detail.quantity}</span>
+            <button className="bg-gray-500 text-white px-2 py-1 rounded" onClick={() => updateQuantity(1)}>+</button>
+          </div>
         </div>
       )}
       <p><strong>Ürün Adı:</strong> {detail.product_name}</p>

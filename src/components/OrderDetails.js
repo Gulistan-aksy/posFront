@@ -141,6 +141,15 @@ const OrderDetails = () => {
     setTotalAmount(newTotalAmount); // Yeni total_amount'u güncelle
   };
 
+  // Quantity güncelleme işlevi
+  const handleQuantityChange = (id, newQuantity, newTotalPrice) => {
+    setOrderDetails((prevDetails) =>
+      prevDetails.map((detail) =>
+        detail.id === id ? { ...detail, quantity: newQuantity, total_price: newTotalPrice } : detail
+      )
+    );
+  };
+
   const handleGiftToggleForNew = (index) => {
     const updatedProducts = [...selectedProducts];
     updatedProducts[index].is_gift = !updatedProducts[index].is_gift;
@@ -173,6 +182,7 @@ const OrderDetails = () => {
             onClick={() => handleDetailClick(detail)}
             onDelete={() => handleDeleteOrderDetail(detail.id)} // Delete işlevi çalışıyor
             onGiftToggle={handleGiftToggle} // Gift işlevi eklendi
+            onQuantityChange={handleQuantityChange} // Quantity güncelleme eklendi
           />
         ))}
 
@@ -241,3 +251,4 @@ const OrderDetails = () => {
 };
 
 export default OrderDetails;
+
