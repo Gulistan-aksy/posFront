@@ -126,7 +126,12 @@ const OrderDetails = () => {
     return totalAmount + newDetailsTotal; // Hem var olan hem de new detayları toplar
   };
 
-  // **Eksik handleGiftToggle Tanımlaması**
+  // OrderDetailCard'daki buton işlevleri (delete, gift, move) korunuyor
+  const handleDetailClick = (detail) => {
+    setSelectedDetail(detail);
+  };
+
+  // Hediye durumu güncelleme ve total_amount'u güncelleme işlevi
   const handleGiftToggle = (isGift, newTotalAmount) => {
     setOrderDetails((prevDetails) =>
       prevDetails.map((detail) =>
@@ -136,6 +141,7 @@ const OrderDetails = () => {
     setTotalAmount(newTotalAmount); // Yeni total_amount'u güncelle
   };
 
+  // Quantity güncelleme işlevi
   const handleQuantityChange = (id, newQuantity, newTotalPrice, newTotalAmount) => {
     setOrderDetails((prevDetails) =>
       prevDetails.map((detail) =>
@@ -174,7 +180,7 @@ const OrderDetails = () => {
             key={detail.id}
             detail={detail}
             isSelected={selectedDetail && selectedDetail.id === detail.id}
-            onClick={() => setSelectedDetail(detail)}
+            onClick={() => handleDetailClick(detail)}
             onDelete={() => handleDeleteOrderDetail(detail.id)} // Delete işlevi çalışıyor
             onGiftToggle={handleGiftToggle} // Gift işlevi eklendi
             onQuantityChange={handleQuantityChange} // Quantity güncelleme eklendi
