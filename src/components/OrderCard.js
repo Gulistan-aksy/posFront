@@ -1,4 +1,4 @@
-// components/OrderCard.js
+// OrderCard.js
 import React from 'react';
 
 const OrderCard = ({ order, onClick }) => {
@@ -9,6 +9,7 @@ const OrderCard = ({ order, onClick }) => {
     >
       <p className="text-lg font-medium">Sipariş ID: {order.order_id}</p>
       <p className="text-md">Toplam Tutar: <span className="font-bold">{order.total_amount} TL</span></p>
+      <p className="text-md">Ödenmiş mi: <span className="font-bold">{order.is_paid ? 'Evet' : 'Hayır'}</span></p> {/* is_paid bilgisi */}
     </div>
   );
 };
